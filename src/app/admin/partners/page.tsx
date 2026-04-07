@@ -17,7 +17,7 @@ type Partner = {
   tier: string | null;
   website_url: string | null;
   is_active: boolean;
-  sort_order: number;
+  display_order: number;
   created_at: string;
 };
 
@@ -25,8 +25,8 @@ export default async function AdminPartnersPage() {
   const supabase = createAdminClient();
   const { data: partners, error } = await supabase
     .from('partners')
-    .select('id, name, tier, website_url, is_active, sort_order, created_at')
-    .order('sort_order', { ascending: true })
+    .select('id, name, tier, website_url, is_active, display_order, created_at')
+    .order('display_order', { ascending: true })
     .order('created_at', { ascending: false });
 
   const rows = (partners || []) as Partner[];
@@ -85,7 +85,7 @@ export default async function AdminPartnersPage() {
                       '-'
                     )}
                   </TableCell>
-                  <TableCell>{partner.sort_order}</TableCell>
+                  <TableCell>{partner.display_order}</TableCell>
                   <TableCell>{formatDate(partner.created_at)}</TableCell>
                 </TableRow>
               ))
