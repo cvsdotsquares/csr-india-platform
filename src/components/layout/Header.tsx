@@ -1,7 +1,14 @@
 import Link from 'next/link';
+import { signOut } from '@/lib/auth/actions';
+import { createClient } from '@/lib/supabase/server';
 import { publicNavigation } from '@/config/navigation';
 
-export default function Header() {
+export default async function Header() {
+  const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
   return (
     <header className="sticky top-0 z-50 border-b bg-white/95 backdrop-blur">
       <div className="container mx-auto flex h-16 items-center justify-between px-4">
@@ -16,12 +23,30 @@ export default function Header() {
           ))}
         </nav>
         <div className="flex items-center gap-4">
-          <Link href="/login" className="text-sm font-medium text-gray-700 hover:text-brand-500">
-            Login
-          </Link>
-          <Link href="/register" className="rounded-lg bg-brand-500 px-4 py-2 text-sm font-medium text-white hover:bg-brand-600 transition-colors">
-            Register
-          </Link>
+          {user ? (
+            <>
+              <Link href="/dashboard" className="text-sm font-medium text-gray-700 hover:text-brand-500">
+                Dashboard
+              </Link>
+              <form action={signOut}>
+                <button
+                  type="submit"
+                  className="rounded-lg bg-brand-500 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-brand-600"
+                >
+                  Logout
+                </button>
+              </form>
+            </>
+          ) : (
+            <>
+              <Link href="/login" className="text-sm font-medium text-gray-700 hover:text-brand-500">
+                Login
+              </Link>
+              <Link href="/register" className="rounded-lg bg-brand-500 px-4 py-2 text-sm font-medium text-white hover:bg-brand-600 transition-colors">
+                Register
+              </Link>
+            </>
+          )}
         </div>
       </div>
     </header>

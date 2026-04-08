@@ -2,9 +2,11 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { dashboardNavigation } from '@/config/navigation';
+import { signOut } from '@/lib/auth/actions';
 import { cn } from '@/lib/utils';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { getInitials } from '@/lib/utils';
+import { LogOut } from 'lucide-react';
 
 interface DashboardSidebarProps {
   userName: string;
@@ -44,6 +46,16 @@ export default function DashboardSidebar({ userName, userEmail, isAdmin }: Dashb
             </Link>
           </>
         )}
+        <div className="my-4 border-t" />
+        <form action={signOut}>
+          <button
+            type="submit"
+            className="flex w-full items-center gap-3 rounded-lg px-3 py-2 text-sm text-gray-700 transition-colors hover:bg-gray-100"
+          >
+            <LogOut className="h-4 w-4" />
+            Logout
+          </button>
+        </form>
       </nav>
     </aside>
   );
